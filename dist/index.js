@@ -6021,7 +6021,7 @@ function getActionInput() {
         numOldVersionsToDelete: Number(core_1.getInput('num-old-versions-to-delete')),
         searchRange: Number(core_1.getInput('search-range')),
         token: core_1.getInput('token'),
-        dryRun: Boolean(core_1.getInput('dry-run'))
+        dryRun: core_1.getInput('dry-run') === 'true'
     });
 }
 function run() {
@@ -6473,10 +6473,10 @@ function deletePackageVersions(packageVersionIds, token, dryRun = false) {
     }
     const deletes = packageVersionIds.map(id => deletePackageVersion(id, token, dryRun).pipe(operators_1.tap(result => {
         if (result) {
-            console.log(`version with id: ${id}, deleted`);
+            console.log(`version with id: ${id}, deleted ${dryRun ? '(dry-run)' : ''}`);
         }
         else {
-            console.log(`version with id: ${id}, not deleted`);
+            console.log(`version with id: ${id}, not deleted ${dryRun ? '(dry-run)' : ''}`);
         }
     })));
     return rxjs_1.merge(...deletes);
